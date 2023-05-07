@@ -1,4 +1,12 @@
-# logger
+# Logger
+
+Logger is a small PHP library that provides functionality to log messages to various targets.
+
+Installation
+You can install the Logger library using Composer. Run the following command:
+
+        composer require giurgiur/logger
+
 
 E.g. of usage:
 
