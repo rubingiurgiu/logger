@@ -2,22 +2,26 @@
 
 namespace Logger;
 
-
 use Logger\Constants\LogLevel;
 
 class Logger
 {
-    private mixed $minLogLevel = LogLevel::DEBUG;
+    private mixed $level;
     private array $targets = [];
 
     /**
      * @param array $targets
-     * @param int $minLogLevel
+     * @param int $level
      */
-    public function __construct(array $targets, int $minLogLevel = LogLevel::DEBUG)
+    public function __construct(array $targets, int $level = LogLevel::DEBUG)
     {
         $this->targets = $targets;
-        $this->minLogLevel = $minLogLevel;
+        $this->level = $level;
+
+
+        foreach ($this->targets as $target) {
+            $target->setLevel($this->level);
+        }
     }
 
     /**
@@ -63,10 +67,15 @@ class Logger
      */
     private function log($level, $msg): void
     {
-        if ($level >= $this->minLogLevel) {
-            foreach ($this->targets as $target) {
+        if ($level < $this->level) {
+            return;
+        }
+
+        foreach ($this->targets as $target) {
+            if ($level >= $target->getLevel()) {
                 $target->log($level, $msg);
             }
         }
     }
+
 }
